@@ -20,4 +20,17 @@ public class King extends ChessPiece {
     public String getSymbol() {
         return "K";
     }
+
+    public boolean isUnderAttack(ChessBoard board, int line, int column) {
+        boolean underAttack = false;
+
+        for (int i = 0; i < 8 && !underAttack; i++) {
+            for (int j = 0; j < 8 && !underAttack; j++) {
+                if (!board.board[i][j].getColor().equals(color)) {
+                    underAttack = board.board[i][j].canMoveToPosition(board, i, j, line, column);
+                }
+            }
+        }
+        return underAttack;
+    }
 }
