@@ -20,7 +20,7 @@ public class ChessBoard {
             if (!nowPlayer.equals(board[startLine][startColumn].getColor())) return false;
 
             if (board[startLine][startColumn].canMoveToPosition(this, startLine, startColumn, endLine, endColumn)) {
-                board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we moved a piece
+                board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we move     a piece
                 board[startLine][startColumn] = null; // set null to previous cell
                 this.nowPlayer = this.nowPlayerColor().equals(white) ? black : white;
                 board[endLine][endColumn].chk = false;
@@ -29,7 +29,7 @@ public class ChessBoard {
         } else return false;
     }
 
-    public boolean castling() {
+    public boolean castling0() {
         if (nowPlayer.equals(white)) {
             if (board[0][0] == null || board[0][4] == null) return false;
             if (board[0][0].getSymbol().equals("R") && board[0][4].getSymbol().equals("K") &&
@@ -47,7 +47,11 @@ public class ChessBoard {
                     return true;
                 } else return false;
             } else return false;
-        } else {
+        } else return false;
+    }
+
+    public boolean castling7() {
+        if (nowPlayer.equals(white)) {
             if (board[7][0] == null || board[7][4] == null) return false;
             if (board[7][0].getSymbol().equals("R") && board[7][4].getSymbol().equals("K") &&
                     board[7][1] == null && board[7][2] == null && board[7][3] == null) {
@@ -64,7 +68,7 @@ public class ChessBoard {
                     return true;
                 } else return false;
             } else return false;
-        }
+        } else return false;
     }
 
     public void printBoard() {  //print board in console
