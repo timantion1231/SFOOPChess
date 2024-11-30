@@ -3,6 +3,8 @@ package org.example;
 public class ChessBoard {
     public ChessPiece[][] board = new ChessPiece[8][8]; // creating a field for game
     String nowPlayer;
+    private final String white = "White";
+    private final String black = "Black";
 
     public ChessBoard(String nowPlayer) {
         this.nowPlayer = nowPlayer;
@@ -20,11 +22,49 @@ public class ChessBoard {
             if (board[startLine][startColumn].canMoveToPosition(this, startLine, startColumn, endLine, endColumn)) {
                 board[endLine][endColumn] = board[startLine][startColumn]; // if piece can move, we moved a piece
                 board[startLine][startColumn] = null; // set null to previous cell
-                this.nowPlayer = this.nowPlayerColor().equals("White") ? "Black" : "White";
-
+                this.nowPlayer = this.nowPlayerColor().equals(white) ? black : white;
+                board[endLine][endColumn].chk = false;
                 return true;
             } else return false;
         } else return false;
+    }
+
+    public boolean castling() {
+        if (nowPlayer.equals(white)) {
+            if (board[0][0] == null || board[0][4] == null) return false;
+            if (board[0][0].getSymbol().equals("R") && board[0][4].getSymbol().equals("K") &&
+                    board[0][1] == null && board[0][2] == null && board[0][3] == null) {
+                if (board[0][0].getColor().equals(white) && board[0][4].getColor().equals(white) &&
+                        board[0][0].chk && board[0][4].chk &&
+                        !new King(white).isUnderAttack(this, 0, 2)) {
+                    board[0][4] = null;
+                    board[0][2] = new King(white);
+                    board[0][2].chk = false;
+                    board[0][0] = null;
+                    board[0][3] = new Rook(white);
+                    board[0][3].chk = false;
+                    nowPlayer = black;
+                    return true;
+                } else return false;
+            } else return false;
+        } else {
+            if (board[7][0] == null || board[7][4] == null) return false;
+            if (board[7][0].getSymbol().equals("R") && board[7][4].getSymbol().equals("K") &&
+                    board[7][1] == null && board[7][2] == null && board[7][3] == null) {
+                if (board[7][0].getColor().equals(black) && board[7][4].getColor().equals(black) &&
+                        board[0][0].chk && board[0][4].chk &&
+                        !new King(black).isUnderAttack(this, 0, 2)) {
+                    board[7][4] = null;
+                    board[7][2] = new King(black);
+                    board[7][2].chk = false;
+                    board[7][0] = null;
+                    board[7][3] = new Rook(black);
+                    board[7][3].chk = false;
+                    nowPlayer = white;
+                    return true;
+                } else return false;
+            } else return false;
+        }
     }
 
     public void printBoard() {  //print board in console
